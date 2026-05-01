@@ -2,17 +2,27 @@ import { useState, useEffect, useRef } from 'react'
 import html2canvas from 'html2canvas'
 import './App.css'
 
+// Importando as imagens para que o Vite reconheça os caminhos corretamente
+import unidade1 from '/public/unidade1.png'
+import unidade2 from '/public/unidade2.png'
+import unidade3 from '/public/unidade3.png'
+import unidade4 from '/public/unidade4.png'
+
 function App() {
   const [ano, definirAno] = useState(2026)
   const [mes, definirMes] = useState(4)
-  // Define a Unidade 1 como o logotipo padrão inicial
-  const [logotipo, definirLogotipo] = useState("/unidade1.jpg")
+  
+  // Define a Unidade 1 importada como padrão
+  const [logotipo, definirLogotipo] = useState(unidade1)
+  
+  // Lista inicial usando as variáveis importadas
   const [logotiposLista, setLogotiposLista] = useState([
-    "/unidade1.jpg",
-    "/unidade2.jpg",
-    "/unidade3.jpg",
-    "/unidade4.jpg"
+    unidade1,
+    unidade2,
+    unidade3,
+    unidade4
   ])
+  
   const [notas, definirNotas] = useState({})
   const [feriados, definirFeriados] = useState({})
   const [dataHora, setDataHora] = useState(new Date())
@@ -114,8 +124,8 @@ function App() {
       })
       referenciaFolha.current.classList.remove('modo-exportacao')
       const link = document.createElement('a')
-      link.download = `calendario-${nomesDosMeses[mes]}-${ano}.jpg`
-      link.href = canvas.toDataURL('image/jpeg', 0.95)
+      link.download = `calendario-${nomesDosMeses[mes]}-${ano}.png`
+      link.href = canvas.toDataURL('image/png', 1.0)
       link.click()
     }
   }
@@ -132,7 +142,7 @@ function App() {
             {nomesDosMeses.map((m, i) => <option key={m} value={i}>{m}</option>)}
           </select>
           <input type="number" value={ano} onChange={(e) => definirAno(parseInt(e.target.value))} />
-          <button className="botao-imagem" onClick={exportarComoImagem}>Exportar JPG</button>
+          <button className="botao-imagem" onClick={exportarComoImagem}>Exportar PNG</button>
           <button className="botao-imprimir" onClick={() => window.print()}>Gerar PDF</button>
         </div>
       </header>
