@@ -5,10 +5,18 @@ import './App.css'
 function App() {
   const [ano, definirAno] = useState(2026)
   const [mes, definirMes] = useState(4)
-  const [logotipo, definirLogotipo] = useState(null)
+  // Define a Unidade 1 como o logotipo padrão inicial
+  const [logotipo, definirLogotipo] = useState("/unidade1.jpg")
+  const [logotiposLista, setLogotiposLista] = useState([
+    "/unidade1.jpg",
+    "/unidade2.jpg",
+    "/unidade3.jpg",
+    "/unidade4.jpg"
+  ])
   const [notas, definirNotas] = useState({})
   const [feriados, definirFeriados] = useState({})
   const [dataHora, setDataHora] = useState(new Date())
+  const [limiteExcedido, setLimiteExcedido] = useState(false)
   
   const referenciaFolha = useRef(null)
   const referenciaAviso = useRef(null)
@@ -38,6 +46,14 @@ function App() {
     definirFeriados(novosFeriados)
   }, [ano, mes])
 
+  const verificarLimiteTexto = () => {
+    if (referenciaAviso.current) {
+      const el = referenciaAviso.current
+      const excedeu = el.scrollHeight > el.clientHeight
+      setLimiteExcedido(excedeu)
+    }
+  }
+
   const gerarCalendarioCompleto = () => {
     const primeiroDiaDoMes = new Date(ano, mes, 1).getDay()
     const diasNoMes = new Date(ano, mes + 1, 0).getDate()
@@ -65,10 +81,12 @@ function App() {
     return calendario
   }
 
-  const manipularTrocaDeLogotipo = (evento) => {
+  const adicionarNovoLogotipo = (evento) => {
     const arquivo = evento.target.files[0]
     if (arquivo) {
-      definirLogotipo(URL.createObjectURL(arquivo))
+      const url = URL.createObjectURL(arquivo)
+      setLogotiposLista(prev => [...prev, url])
+      definirLogotipo(url)
     }
   }
 
@@ -82,6 +100,7 @@ function App() {
 
   const aplicarEstilo = (comando, valor = null) => {
     document.execCommand(comando, false, valor)
+    setTimeout(verificarLimiteTexto, 10)
   }
 
   const exportarComoImagem = async () => {
@@ -113,101 +132,116 @@ function App() {
             {nomesDosMeses.map((m, i) => <option key={m} value={i}>{m}</option>)}
           </select>
           <input type="number" value={ano} onChange={(e) => definirAno(parseInt(e.target.value))} />
-          <label className="botao-upload">
-            Trocar Logo
-            <input type="file" accept="image/*" onChange={manipularTrocaDeLogotipo} />
-          </label>
           <button className="botao-imagem" onClick={exportarComoImagem}>Exportar JPG</button>
           <button className="botao-imprimir" onClick={() => window.print()}>Gerar PDF</button>
         </div>
       </header>
 
-      <main className="area-impressao">
-        <div className="folha-a4" ref={referenciaFolha}>
-          <header className="cabecalho-calendario">
-            <div className="area-logotipo-cliente">
-              {logotipo ? (
+      <div className="layout-principal">
+        <main className="area-impressao">
+          <div className="folha-a4" ref={referenciaFolha}>
+            <header className="cabecalho-calendario">
+              <div className="area-logotipo-cliente">
                 <img src={logotipo} alt="Logo Cliente" />
-              ) : (
-                <div className="marcador-logo ocultar-na-impressao">Logotipo</div>
-              )}
-            </div>
-            
-            <div className="titulo-mes">
-              {nomesDosMeses[mes].substring(0, 3)}
-            </div>
-            
-            <div className="titulo-ano">
-              {ano}
-            </div>
-          </header>
+              </div>
+              
+              <div className="titulo-mes">
+                {nomesDosMeses[mes].substring(0, 3)}
+              </div>
+              
+              <div className="titulo-ano">
+                {ano}
+              </div>
+            </header>
 
-          <div className="grade-calendario">
-            <div className="cabecalho-grade">
-              {diasDaSemana.map(d => <div key={d} className="dia-semana">{d}</div>)}
-            </div>
+            <div className="grade-calendario">
+              <div className="cabecalho-grade">
+                {diasDaSemana.map(d => <div key={d} className="dia-semana">{d}</div>)}
+              </div>
 
-            <div className="corpo-grade">
-              {gerarCalendarioCompleto().map((item, indice) => {
-                const chaveDia = `${ano}-${mes}-${item.dia}`
-                const eFeriado = feriados[chaveDia]
-                
-                return (
-                  <div 
-                    key={indice} 
-                    className={`celula-dia ${!item.dia && !item.final ? 'vazia-inicio' : ''} ${item.final ? 'vazia-final' : ''} ${eFeriado ? 'dia-feriado' : ''} ${item.eDomingo ? 'celula-domingo' : ''}`}
-                  >
-                    {item.dia && (
-                      <>
-                        <div className="cabecalho-dia">
-                          <div className="info-data">
-                            <span className="numero-dia">{item.dia}</span>
+              <div className="corpo-grade">
+                {gerarCalendarioCompleto().map((item, indice) => {
+                  const chaveDia = `${ano}-${mes}-${item.dia}`
+                  const eFeriado = feriados[chaveDia]
+                  
+                  return (
+                    <div 
+                      key={indice} 
+                      className={`celula-dia ${!item.dia && !item.final ? 'vazia-inicio' : ''} ${item.final ? 'vazia-final' : ''} ${eFeriado ? 'dia-feriado' : ''} ${item.eDomingo ? 'celula-domingo' : ''}`}
+                    >
+                      {item.dia && (
+                        <>
+                          <div className="cabecalho-dia">
+                            <div className="info-data">
+                              <span className="numero-dia">{item.dia}</span>
+                            </div>
+                            <input 
+                              type="checkbox" 
+                              className="marcador-feriado"
+                              checked={eFeriado || false}
+                              onChange={() => alternarFeriado(item.dia)}
+                            />
                           </div>
-                          <input 
-                            type="checkbox" 
-                            className="marcador-feriado"
-                            checked={eFeriado || false}
-                            onChange={() => alternarFeriado(item.dia)}
+                          <textarea
+                            className="entrada-dia"
+                            placeholder={!eFeriado ? "Adicionar texto..." : ""}
+                            value={notas[chaveDia] || ""}
+                            onChange={(e) => atualizarNota(item.dia, e.target.value)}
+                            disabled={eFeriado}
                           />
-                        </div>
-                        <textarea
-                          className="entrada-dia"
-                          placeholder={!eFeriado ? "Adicionar texto..." : ""}
-                          value={notas[chaveDia] || ""}
-                          onChange={(e) => atualizarNota(item.dia, e.target.value)}
-                          disabled={eFeriado}
-                        />
-                        {eFeriado && <div className="risco-diagonal"></div>}
-                      </>
-                    )}
-                  </div>
-                )
-              })}
+                          {eFeriado && <div className="risco-diagonal"></div>}
+                        </>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
-          </div>
 
-          <footer className="rodape-calendario">
-            <div className="barra-ferramentas-aviso ocultar-na-impressao">
-              <button onClick={() => aplicarEstilo('bold')}>B</button>
-              <button onClick={() => aplicarEstilo('italic')}>I</button>
-              <button onClick={() => aplicarEstilo('underline')}>U</button>
-              <button onClick={() => aplicarEstilo('justifyLeft')}>←</button>
-              <button onClick={() => aplicarEstilo('justifyCenter')}>↔</button>
-              <button onClick={() => aplicarEstilo('justifyRight')}>→</button>
-              <button onClick={() => aplicarEstilo('fontSize', '5')}>A+</button>
-              <button onClick={() => aplicarEstilo('fontSize', '3')}>A-</button>
-            </div>
-            <div className="area-avisos">
-              <div 
-                className="editor-aviso"
-                contentEditable="true"
-                ref={referenciaAviso}
-                data-placeholder="Adicionar aviso importante aqui..."
-              ></div>
-            </div>
-          </footer>
-        </div>
-      </main>
+            <footer className="rodape-calendario">
+              <div className="barra-ferramentas-aviso ocultar-na-impressao">
+                <button onClick={() => aplicarEstilo('bold')}>B</button>
+                <button onClick={() => aplicarEstilo('italic')}>I</button>
+                <button onClick={() => aplicarEstilo('underline')}>U</button>
+                <button onClick={() => aplicarEstilo('justifyLeft')}>←</button>
+                <button onClick={() => aplicarEstilo('justifyCenter')}>↔</button>
+                <button onClick={() => aplicarEstilo('justifyRight')}>→</button>
+                <button onClick={() => aplicarEstilo('fontSize', '5')}>A+</button>
+                <button onClick={() => aplicarEstilo('fontSize', '3')}>A-</button>
+              </div>
+              <div className={`area-avisos ${limiteExcedido ? 'limite-atingido' : ''}`}>
+                {limiteExcedido && <span className="aviso-limite ocultar-na-impressao">Limite de texto atingido!</span>}
+                <div 
+                  className="editor-aviso"
+                  contentEditable="true"
+                  ref={referenciaAviso}
+                  onInput={verificarLimiteTexto}
+                  data-placeholder="Adicionar aviso importante aqui..."
+                ></div>
+              </div>
+            </footer>
+          </div>
+        </main>
+
+        <aside className="seletor-logotipos ocultar-na-impressao">
+          <h3>Unidades</h3>
+          <div className="lista-logotipos">
+            {logotiposLista.map((url, index) => (
+              <button 
+                key={index} 
+                className={`item-logotipo ${logotipo === url ? 'ativo' : ''}`}
+                onClick={() => definirLogotipo(url)}
+              >
+                <img src={url} alt={`Unidade ${index + 1}`} />
+              </button>
+            ))}
+            <label className="botao-adicionar-logo">
+              <span>+</span>
+              <input type="file" accept="image/*" onChange={adicionarNovoLogotipo} />
+            </label>
+          </div>
+        </aside>
+      </div>
 
       <footer className="footer-geral ocultar-na-impressao">
         <div className="footer-conteudo">
