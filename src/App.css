@@ -187,19 +187,20 @@ body {
   font-size: 100px;
   font-weight: 900;
   color: var(--azul-marinho);
-  font-style: italic;
   line-height: 0.8;
   letter-spacing: -5px;
   text-align: center;
   flex: 1;
+  font-family: "Chango", sans-serif;
 }
 
 .titulo-ano {
-  font-size: 55px;
+  font-size: 40px;
   font-weight: 700;
   color: var(--azul-marinho);
   width: 180px;
   text-align: right;
+  font-family: "Chango", sans-serif;
 }
 
 .grade-calendario {
@@ -369,7 +370,7 @@ body {
   padding: 15px;
   border-radius: 8px;
   background-color: var(--branco);
-  height: 35mm;
+  height: 30mm;
   max-height: 35mm;
   display: flex;
   align-items: center;
