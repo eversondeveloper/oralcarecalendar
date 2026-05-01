@@ -52,16 +52,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const novosFeriados = {};
-    const diasNoMes = new Date(ano, mes + 1, 0).getDate();
-
-    for (let i = 1; i <= diasNoMes; i++) {
-      const data = new Date(ano, mes, i);
-      if (data.getDay() === 0) {
-        novosFeriados[`${ano}-${mes}-${i}`] = true;
-      }
-    }
-    definirFeriados(novosFeriados);
+    definirFeriados({});
   }, [ano, mes]);
 
   const verificarLimiteTexto = () => {
@@ -78,22 +69,19 @@ function App() {
     const calendario = [];
 
     for (let i = 0; i < primeiroDiaDoMes; i++) {
-      calendario.push({ dia: null, eDomingo: false, final: false });
+      calendario.push({ dia: null, final: false });
     }
 
     for (let i = 1; i <= diasNoMes; i++) {
-      const data = new Date(ano, mes, i);
-      const indiceSemana = data.getDay();
       calendario.push({
         dia: i,
-        eDomingo: indiceSemana === 0,
         final: false,
       });
     }
 
     const celulasRestantes = 42 - calendario.length;
     for (let i = 0; i < celulasRestantes; i++) {
-      calendario.push({ dia: null, eDomingo: false, final: true });
+      calendario.push({ dia: null, final: true });
     }
 
     return calendario;
@@ -116,10 +104,22 @@ function App() {
   };
 
   const alternarFeriado = (dia) => {
+    const chave = `${ano}-${mes}-${dia}`;
+    const seraFeriado = !feriados[chave];
+
     definirFeriados((anterior) => ({
       ...anterior,
-      [`${ano}-${mes}-${dia}`]: !anterior[`${ano}-${mes}-${dia}`],
+      [chave]: seraFeriado,
     }));
+
+    // Se estiver marcando como feriado, limpa o texto do dia para voltar à cor padrão
+    if (seraFeriado) {
+      definirNotas((anterior) => {
+        const novoEstado = { ...anterior };
+        delete novoEstado[chave];
+        return novoEstado;
+      });
+    }
   };
 
   const aplicarEstilo = (comando, valor = null) => {
@@ -204,11 +204,16 @@ function App() {
                 {gerarCalendarioCompleto().map((item, indice) => {
                   const chaveDia = `${ano}-${mes}-${item.dia}`;
                   const eFeriado = feriados[chaveDia];
+                  const temTexto = notas[chaveDia] && notas[chaveDia].trim() !== "";
 
                   return (
                     <div
                       key={indice}
-                      className={`celula-dia ${!item.dia && !item.final ? "vazia-inicio" : ""} ${item.final ? "vazia-final" : ""} ${eFeriado ? "dia-feriado" : ""} ${item.eDomingo ? "celula-domingo" : ""}`}
+                      className={`celula-dia 
+                        ${!item.dia && !item.final ? "vazia-inicio" : ""} 
+                        ${item.final ? "vazia-final" : ""} 
+                        ${eFeriado ? "dia-feriado" : ""} 
+                        ${temTexto ? "preenchido" : ""}`}
                     >
                       {item.dia && (
                         <>
