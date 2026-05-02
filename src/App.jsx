@@ -47,6 +47,7 @@ function App() {
   const [dataHora, setDataHora] = useState(new Date());
   const [limiteExcedido, setLimiteExcedido] = useState(false);
   const [avisoVisivel, setAvisoVisivel] = useState(false);
+  const [avisoHTML, setAvisoHTML] = useState("");
 
   const referenciaFolha = useRef(null);
   const referenciaAviso = useRef(null);
@@ -175,6 +176,11 @@ function App() {
   const aplicarEstilo = (comando, valor = null) => {
     document.execCommand(comando, false, valor);
     setTimeout(verificarLimiteTexto, 10);
+    setTimeout(() => {
+      if (referenciaAviso.current) {
+        setAvisoHTML(referenciaAviso.current.innerHTML);
+      }
+    }, 20);
   };
 
   const ativarEdicaoAviso = () => {
@@ -185,6 +191,9 @@ function App() {
 
   const handleAvisoInput = (e) => {
     verificarLimiteTexto();
+    if (referenciaAviso.current) {
+      setAvisoHTML(referenciaAviso.current.innerHTML);
+    }
   };
 
   const handleAvisoKeyDown = (e) => {
@@ -201,16 +210,78 @@ function App() {
     setBackgroundAtual(arquivo);
   };
 
+  const formatarTextoComQuebras = (texto) => {
+    if (!texto) return "";
+    return texto.split('\n').map((linha, i) => (
+      <React.Fragment key={i}>
+        {linha}
+        {i < texto.split('\n').length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
   const exportarComoImagem = async () => {
     if (referenciaFolha.current) {
       referenciaFolha.current.classList.add("modo-exportacao");
-      const canvas = await html2canvas(referenciaFolha.current, {
+      
+      const elementoParaExportar = referenciaFolha.current.cloneNode(true);
+      
+      const textareas = elementoParaExportar.querySelectorAll('.entrada-dia');
+      textareas.forEach(textarea => {
+        const valor = textarea.value;
+        if (valor && textarea.parentElement) {
+          const divVisualizacao = document.createElement('div');
+          divVisualizacao.className = 'entrada-dia-visualizacao';
+          divVisualizacao.style.cssText = textarea.style.cssText;
+          divVisualizacao.style.whiteSpace = 'pre-wrap';
+          divVisualizacao.style.wordWrap = 'break-word';
+          divVisualizacao.style.overflow = 'auto';
+          divVisualizacao.style.height = '100%';
+          divVisualizacao.style.display = 'flex';
+          divVisualizacao.style.alignItems = 'center';
+          divVisualizacao.style.justifyContent = 'center';
+          divVisualizacao.style.textAlign = 'center';
+          
+          const linhas = valor.split('\n');
+          linhas.forEach((linha, index) => {
+            if (index > 0) {
+              divVisualizacao.appendChild(document.createElement('br'));
+            }
+            divVisualizacao.appendChild(document.createTextNode(linha));
+          });
+          
+          textarea.style.display = 'none';
+          textarea.parentElement.appendChild(divVisualizacao);
+        }
+      });
+      
+      const avisoOriginal = elementoParaExportar.querySelector('.editor-aviso');
+      if (avisoOriginal && avisoOriginal.innerHTML) {
+        const divAviso = document.createElement('div');
+        divAviso.className = 'editor-aviso-visualizacao';
+        divAviso.style.cssText = avisoOriginal.style.cssText;
+        divAviso.style.whiteSpace = 'pre-wrap';
+        divAviso.style.wordWrap = 'break-word';
+        divAviso.innerHTML = avisoOriginal.innerHTML;
+        avisoOriginal.style.display = 'none';
+        avisoOriginal.parentElement.appendChild(divAviso);
+      }
+      
+      document.body.appendChild(elementoParaExportar);
+      elementoParaExportar.style.position = 'absolute';
+      elementoParaExportar.style.left = '-9999px';
+      elementoParaExportar.style.top = '-9999px';
+      
+      const canvas = await html2canvas(elementoParaExportar, {
         scale: 3,
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
       });
+      
+      document.body.removeChild(elementoParaExportar);
       referenciaFolha.current.classList.remove("modo-exportacao");
+      
       const link = document.createElement("a");
       link.download = `calendario-${nomesDosMeses[mes]}-${ano}.png`;
       link.href = canvas.toDataURL("image/png", 1.0);
@@ -358,6 +429,7 @@ function App() {
                             value={valorNota}
                             onChange={(e) => atualizarNota(item.dia, e.target.value)}
                             disabled={eFeriado}
+                            style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                           />
                           {eFeriado && <div className="risco-diagonal"></div>}
                         </>
@@ -422,7 +494,7 @@ function App() {
                     cursor: "text",
                     overflowY: "auto",
                     wordWrap: "break-word",
-                    whiteSpace: "normal",
+                    whiteSpace: "pre-wrap",
                     minHeight: "100%"
                   }}
                 ></div>
