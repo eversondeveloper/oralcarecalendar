@@ -753,7 +753,7 @@ body {
   
   .seletor-instrucoes,
   .seletor-logotipos {
-    width: 100%;
+    width: 80%;
     max-width: 400px;
     position: static;
     order: 2;
