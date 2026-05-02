@@ -33,6 +33,12 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+.logo-sistema {
+  height: 34px;
+  width: auto;
+  object-fit: contain;
+}
+
 .container-sistema {
   display: flex;
   flex-direction: column;

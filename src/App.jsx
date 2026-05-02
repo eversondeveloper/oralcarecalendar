@@ -4,6 +4,7 @@ import "./App.css";
 
 import unidade1 from "/unidade1.png";
 import unidade2 from "/unidade2.png";
+import logo1 from "/logo1.png";
 
 import back1 from "/back1.jpg";
 import backfolha2 from "/backfolha2.jpg";
@@ -22,10 +23,7 @@ function App() {
 
   const [logotipo, definirLogotipo] = useState(unidade1);
 
-  const [logotiposLista, setLogotiposLista] = useState([
-    unidade1,
-    unidade2,
-  ]);
+  const [logotiposLista, setLogotiposLista] = useState([unidade1, unidade2]);
 
   const [backgroundAtual, setBackgroundAtual] = useState(back1);
 
@@ -39,7 +37,12 @@ function App() {
     { id: 7, nome: "Background 7", arquivo: backfolha7, miniatura: backfolha7 },
     { id: 8, nome: "Background 8", arquivo: backfolha8, miniatura: backfolha8 },
     { id: 9, nome: "Background 9", arquivo: backfolha9, miniatura: backfolha9 },
-    { id: 10, nome: "Background 10", arquivo: backfolha10, miniatura: backfolha10 },
+    {
+      id: 10,
+      nome: "Background 10",
+      arquivo: backfolha10,
+      miniatura: backfolha10,
+    },
   ];
 
   const [notas, definirNotas] = useState({});
@@ -53,8 +56,18 @@ function App() {
   const referenciaAviso = useRef(null);
 
   const nomesDosMeses = [
-    "JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO",
-    "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"
+    "JANEIRO",
+    "FEVEREIRO",
+    "MARÇO",
+    "ABRIL",
+    "MAIO",
+    "JUNHO",
+    "JULHO",
+    "AGOSTO",
+    "SETEMBRO",
+    "OUTUBRO",
+    "NOVEMBRO",
+    "DEZEMBRO",
   ];
 
   const diasDaSemana = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
@@ -72,16 +85,16 @@ function App() {
   useEffect(() => {
     const diasNoMes = new Date(ano, mes + 1, 0).getDate();
     const feriadosAutomaticos = {};
-    
+
     for (let dia = 1; dia <= diasNoMes; dia++) {
       if (ehDomingo(dia)) {
         const chave = `${ano}-${mes}-${dia}`;
         feriadosAutomaticos[chave] = true;
       }
     }
-    
+
     definirFeriados(feriadosAutomaticos);
-    
+
     definirNotas((anterior) => {
       const novoEstado = { ...anterior };
       for (let dia = 1; dia <= diasNoMes; dia++) {
@@ -100,9 +113,9 @@ function App() {
       const alturaMaxima = el.parentElement.clientHeight - 20;
       const alturaAtual = el.scrollHeight;
       const excedeu = alturaAtual > alturaMaxima;
-      
+
       setLimiteExcedido(excedeu);
-      
+
       if (excedeu) {
         setAvisoVisivel(true);
         setTimeout(() => {
@@ -198,8 +211,16 @@ function App() {
 
   const handleAvisoKeyDown = (e) => {
     if (limiteExcedido) {
-      const teclaPermitida = e.key === 'Backspace' || e.key === 'Delete' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Home' || e.key === 'End';
-      
+      const teclaPermitida =
+        e.key === "Backspace" ||
+        e.key === "Delete" ||
+        e.key === "ArrowLeft" ||
+        e.key === "ArrowRight" ||
+        e.key === "ArrowUp" ||
+        e.key === "ArrowDown" ||
+        e.key === "Home" ||
+        e.key === "End";
+
       if (!teclaPermitida) {
         e.preventDefault();
       }
@@ -212,10 +233,10 @@ function App() {
 
   const formatarTextoComQuebras = (texto) => {
     if (!texto) return "";
-    return texto.split('\n').map((linha, i) => (
+    return texto.split("\n").map((linha, i) => (
       <React.Fragment key={i}>
         {linha}
-        {i < texto.split('\n').length - 1 && <br />}
+        {i < texto.split("\n").length - 1 && <br />}
       </React.Fragment>
     ));
   };
@@ -223,65 +244,65 @@ function App() {
   const exportarComoImagem = async () => {
     if (referenciaFolha.current) {
       referenciaFolha.current.classList.add("modo-exportacao");
-      
+
       const elementoParaExportar = referenciaFolha.current.cloneNode(true);
-      
-      const textareas = elementoParaExportar.querySelectorAll('.entrada-dia');
-      textareas.forEach(textarea => {
+
+      const textareas = elementoParaExportar.querySelectorAll(".entrada-dia");
+      textareas.forEach((textarea) => {
         const valor = textarea.value;
         if (valor && textarea.parentElement) {
-          const divVisualizacao = document.createElement('div');
-          divVisualizacao.className = 'entrada-dia-visualizacao';
+          const divVisualizacao = document.createElement("div");
+          divVisualizacao.className = "entrada-dia-visualizacao";
           divVisualizacao.style.cssText = textarea.style.cssText;
-          divVisualizacao.style.whiteSpace = 'pre-wrap';
-          divVisualizacao.style.wordWrap = 'break-word';
-          divVisualizacao.style.overflow = 'auto';
-          divVisualizacao.style.height = '100%';
-          divVisualizacao.style.display = 'flex';
-          divVisualizacao.style.alignItems = 'center';
-          divVisualizacao.style.justifyContent = 'center';
-          divVisualizacao.style.textAlign = 'center';
-          
-          const linhas = valor.split('\n');
+          divVisualizacao.style.whiteSpace = "pre-wrap";
+          divVisualizacao.style.wordWrap = "break-word";
+          divVisualizacao.style.overflow = "auto";
+          divVisualizacao.style.height = "100%";
+          divVisualizacao.style.display = "flex";
+          divVisualizacao.style.alignItems = "center";
+          divVisualizacao.style.justifyContent = "center";
+          divVisualizacao.style.textAlign = "center";
+
+          const linhas = valor.split("\n");
           linhas.forEach((linha, index) => {
             if (index > 0) {
-              divVisualizacao.appendChild(document.createElement('br'));
+              divVisualizacao.appendChild(document.createElement("br"));
             }
             divVisualizacao.appendChild(document.createTextNode(linha));
           });
-          
-          textarea.style.display = 'none';
+
+          textarea.style.display = "none";
           textarea.parentElement.appendChild(divVisualizacao);
         }
       });
-      
-      const avisoOriginal = elementoParaExportar.querySelector('.editor-aviso');
+
+      const avisoOriginal = elementoParaExportar.querySelector(".editor-aviso");
       if (avisoOriginal && avisoOriginal.innerHTML) {
-        const divAviso = document.createElement('div');
-        divAviso.className = 'editor-aviso-visualizacao';
+        const divAviso = document.createElement("div");
+        divAviso.className = "editor-aviso-visualizacao";
         divAviso.style.cssText = avisoOriginal.style.cssText;
-        divAviso.style.whiteSpace = 'pre-wrap';
-        divAviso.style.wordWrap = 'break-word';
+        divAviso.style.whiteSpace = "pre-wrap";
+        divAviso.style.wordWrap = "break-word";
         divAviso.innerHTML = avisoOriginal.innerHTML;
-        avisoOriginal.style.display = 'none';
+        avisoOriginal.style.display = "none";
         avisoOriginal.parentElement.appendChild(divAviso);
       }
-      
+
       document.body.appendChild(elementoParaExportar);
-      elementoParaExportar.style.position = 'absolute';
-      elementoParaExportar.style.left = '-9999px';
-      elementoParaExportar.style.top = '-9999px';
-      
+      elementoParaExportar.style.position = "absolute";
+      elementoParaExportar.style.left = "-9999px";
+      elementoParaExportar.style.top = "-9999px";
+
       const canvas = await html2canvas(elementoParaExportar, {
         scale: 3,
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
       });
-      
+
       document.body.removeChild(elementoParaExportar);
       referenciaFolha.current.classList.remove("modo-exportacao");
-      
+
       const link = document.createElement("a");
       link.download = `calendario-${nomesDosMeses[mes]}-${ano}.png`;
       link.href = canvas.toDataURL("image/png", 1.0);
@@ -293,7 +314,7 @@ function App() {
     <div className="container-sistema">
       <header className="topo-site ocultar-na-impressao">
         <div className="marca-sistema">
-          <span className="icone-sistema">⊕</span>
+          <img src={logo1} alt="Logo" className="logo-sistema" />
           <span className="nome-sistema">Oral Care Calendar</span>
         </div>
         <div className="controles-topo">
@@ -302,7 +323,9 @@ function App() {
             onChange={(e) => definirMes(parseInt(e.target.value))}
           >
             {nomesDosMeses.map((m, i) => (
-              <option key={m} value={i}>{m}</option>
+              <option key={m} value={i}>
+                {m}
+              </option>
             ))}
           </select>
           <input
@@ -315,66 +338,81 @@ function App() {
 
       <div className="layout-principal">
         <aside className="seletor-instrucoes ocultar-na-impressao">
-          <h3>📋 COMO USAR</h3>
+          <h3>📋 GUIA RÁPIDO</h3>
           <div className="passo-container">
             <div className="passo-card">
               <div className="passo-numero">1</div>
               <div className="passo-conteudo">
-                <strong>ESCOLHA A DATA</strong>
-                <p>Selecione o mês e o ano no topo da página para gerar o calendário desejado</p>
+                <strong>1. DEFINIR PERÍODO</strong>
+                <p>
+                  Utilize os seletores no topo da página para escolher o mês e o
+                  ano de referência.
+                </p>
               </div>
             </div>
 
             <div className="passo-card">
               <div className="passo-numero">2</div>
               <div className="passo-conteudo">
-                <strong>SELECIONE A UNIDADE</strong>
-                <p>Na lateral direita, escolha qual unidade irá utilizar o calendário</p>
+                <strong>2. INDICAR FERIADOS</strong>
+                <p>
+                  Marque a caixa de seleção nos dias específicos para sinalizar
+                  pontos facultativos ou data de fechamento.
+                </p>
               </div>
             </div>
 
             <div className="passo-card">
               <div className="passo-numero">3</div>
               <div className="passo-conteudo">
-                <strong>MARCAR FERIADOS</strong>
-                <p>Use o checkbox em cada dia para marcar quando o estabelecimento estiver fechado. Você pode marcar e desmarcar à vontade</p>
+                <strong>3. REGISTRAR PROCEDIMENTOS</strong>
+                <p>
+                  Clique sobre qualquer dia do calendário e insira as
+                  informações dos atendimentos ou atividades agendadas.
+                </p>
               </div>
             </div>
 
             <div className="passo-card">
               <div className="passo-numero">4</div>
               <div className="passo-conteudo">
-                <strong>ADICIONAR PROCEDIMENTOS</strong>
-                <p>Clique em qualquer dia do calendário e escreva os procedimentos que serão realizados</p>
+                <strong>4. INSERIR OBSERVAÇÕES</strong>
+                <p>
+                  Use o campo "Avisos" no rodapé para adicionar lembretes ou
+                  comunicados gerais.
+                </p>
               </div>
             </div>
 
             <div className="passo-card">
               <div className="passo-numero">5</div>
               <div className="passo-conteudo">
-                <strong>INSERIR AVISO</strong>
-                <p>Na área de aviso no rodapé, escreva informações importantes (deixe em branco se não houver)</p>
+                <strong>5. SELECIONAR UNIDADE</strong>
+                <p>
+                  Escolha a unidade operacional que utilizará o calendário para
+                  personalizar o cabeçalho.
+                </p>
               </div>
             </div>
 
             <div className="passo-card">
               <div className="passo-numero">6</div>
               <div className="passo-conteudo">
-                <strong>EXPORTAR</strong>
-                <p>Clique em "Exportar PNG" ou "Gerar PDF" para salvar o calendário</p>
+                <strong>6. EXPORTAR DOCUMENTO</strong>
+                <p>Finalize gerando uma imagem.</p>
               </div>
             </div>
           </div>
         </aside>
 
         <main className="area-impressao">
-          <div 
-            className="folha-a4" 
+          <div
+            className="folha-a4"
             ref={referenciaFolha}
             style={{
               backgroundImage: `url('${backgroundAtual}')`,
               backgroundSize: "cover",
-              backgroundPosition: "center"
+              backgroundPosition: "center",
             }}
           >
             <header className="cabecalho-calendario">
@@ -390,7 +428,9 @@ function App() {
             <div className="grade-calendario">
               <div className="cabecalho-grade">
                 {diasDaSemana.map((d) => (
-                  <div key={d} className="dia-semana">{d}</div>
+                  <div key={d} className="dia-semana">
+                    {d}
+                  </div>
                 ))}
               </div>
 
@@ -398,8 +438,9 @@ function App() {
                 {gerarCalendarioCompleto().map((item, indice) => {
                   const chaveDia = `${ano}-${mes}-${item.dia}`;
                   const eFeriado = feriados[chaveDia] || false;
-                  const temTexto = notas[chaveDia] && notas[chaveDia].trim() !== "";
-                  const valorNota = eFeriado ? "" : (notas[chaveDia] || "");
+                  const temTexto =
+                    notas[chaveDia] && notas[chaveDia].trim() !== "";
+                  const valorNota = eFeriado ? "" : notas[chaveDia] || "";
 
                   return (
                     <div
@@ -425,11 +466,20 @@ function App() {
                           </div>
                           <textarea
                             className={`entrada-dia ${eFeriado ? "feriado-ativo" : ""}`}
-                            placeholder={eFeriado ? "" : "Clique aqui para adicionar texto..."}
+                            placeholder={
+                              eFeriado
+                                ? ""
+                                : "Clique aqui para adicionar texto..."
+                            }
                             value={valorNota}
-                            onChange={(e) => atualizarNota(item.dia, e.target.value)}
+                            onChange={(e) =>
+                              atualizarNota(item.dia, e.target.value)
+                            }
                             disabled={eFeriado}
-                            style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+                            style={{
+                              whiteSpace: "pre-wrap",
+                              wordWrap: "break-word",
+                            }}
                           />
                           {eFeriado && <div className="risco-diagonal"></div>}
                         </>
@@ -442,39 +492,82 @@ function App() {
 
             <footer className="rodape-calendario">
               <div className="barra-ferramentas-aviso ocultar-na-impressao">
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("bold")}>B</button>
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("italic")}>I</button>
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("underline")}>U</button>
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("justifyLeft")}>←</button>
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("justifyCenter")}>↔</button>
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("justifyRight")}>→</button>
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("fontSize", "5")}>A+</button>
-                <button onMouseDown={(e) => e.preventDefault()} onClick={() => aplicarEstilo("fontSize", "3")}>A-</button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("bold")}
+                >
+                  B
+                </button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("italic")}
+                >
+                  I
+                </button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("underline")}
+                >
+                  U
+                </button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("justifyLeft")}
+                >
+                  ←
+                </button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("justifyCenter")}
+                >
+                  ↔
+                </button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("justifyRight")}
+                >
+                  →
+                </button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("fontSize", "5")}
+                >
+                  A+
+                </button>
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => aplicarEstilo("fontSize", "3")}
+                >
+                  A-
+                </button>
               </div>
               <div
                 className={`area-avisos ${limiteExcedido ? "limite-atingido" : ""}`}
                 onClick={ativarEdicaoAviso}
-                style={{ 
-                  cursor: "text", 
-                  position: "relative"
+                style={{
+                  cursor: "text",
+                  position: "relative",
                 }}
               >
                 {avisoVisivel && (
-                  <span className="aviso-limite" style={{
-                    position: "absolute",
-                    bottom: "5px",
-                    right: "10px",
-                    background: "#e74c3c",
-                    color: "white",
-                    padding: "4px 10px",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    fontWeight: "bold",
-                    zIndex: 10,
-                    pointerEvents: "none",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                    animation: "fadeInOut 2s ease"
-                  }}>
+                  <span
+                    className="aviso-limite"
+                    style={{
+                      position: "absolute",
+                      bottom: "5px",
+                      right: "10px",
+                      background: "#e74c3c",
+                      color: "white",
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontSize: "11px",
+                      fontWeight: "bold",
+                      zIndex: 10,
+                      pointerEvents: "none",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      animation: "fadeInOut 2s ease",
+                    }}
+                  >
                     ⚠️ Limite atingido
                   </span>
                 )}
@@ -495,20 +588,17 @@ function App() {
                     overflowY: "auto",
                     wordWrap: "break-word",
                     whiteSpace: "pre-wrap",
-                    minHeight: "100%"
+                    minHeight: "100%",
                   }}
                 ></div>
               </div>
             </footer>
           </div>
-          
+
           <div className="botoes-exportacao ocultar-na-impressao">
             <button className="botao-imagem" onClick={exportarComoImagem}>
               📸 EXPORTAR IMAGEM
             </button>
-            {/* <button className="botao-imprimir" onClick={() => window.print()}>
-              📄 GERAR PDF
-            </button> */}
           </div>
         </main>
 
@@ -526,7 +616,11 @@ function App() {
             ))}
             <label className="botao-adicionar-logo">
               <span>+</span>
-              <input type="file" accept="image/*" onChange={adicionarNovoLogotipo} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={adicionarNovoLogotipo}
+              />
             </label>
           </div>
 
@@ -555,9 +649,13 @@ function App() {
 
       <footer className="footer-geral ocultar-na-impressao">
         <div className="footer-conteudo">
-          <span>{dataHora.toLocaleDateString()} - {dataHora.toLocaleTimeString()}</span>
+          <span>
+            {dataHora.toLocaleDateString()} - {dataHora.toLocaleTimeString()}
+          </span>
           <span className="divisor">|</span>
-          <span>Desenvolvido por: <strong>Everscript</strong></span>
+          <span>
+            Desenvolvido por: <strong>Everscript</strong>
+          </span>
         </div>
       </footer>
 
