@@ -1,4 +1,18 @@
 :root {
+  --saude-primary: #0a5c8e;
+  --saude-primary-dark: #074269;
+  --saude-primary-light: #2a7fae;
+  --saude-secondary: #00a8a8;
+  --saude-secondary-dark: #008a8a;
+  --saude-secondary-light: #33c4c4;
+  --saude-success: #27ae60;
+  --saude-success-light: #52c988;
+  --saude-text: #2c3e50;
+  --saude-text-light: #7f8c8d;
+  --saude-background: #ecf0f1;
+  --saude-border: #d5d8dc;
+  --saude-hover: #e8f4f8;
+  
   --azul-marinho: #1a365d;
   --azul-claro: #3b82f6;
   --azul-hover: #2563eb;
@@ -15,7 +29,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--cinza-fundo);
+  background: linear-gradient(135deg, #e8f4f8 0%, #d5e8f0 100%);
   font-family: system-ui, -apple-system, sans-serif;
 }
 
@@ -25,9 +39,8 @@ body {
   min-height: 100vh;
 }
 
-/* TOPBAR */
 .topo-site {
-  background-color: var(--azul-marinho);
+  background: linear-gradient(135deg, var(--saude-primary) 0%, var(--saude-primary-dark) 100%);
   color: var(--branco);
   padding: 15px 40px;
   display: flex;
@@ -45,7 +58,7 @@ body {
 
 .icone-sistema {
   font-size: 22px;
-  border: 2px solid var(--branco);
+  border: 2px solid var(--saude-secondary);
   border-radius: 50%;
   width: 34px;
   height: 34px;
@@ -53,12 +66,17 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  color: var(--saude-secondary);
 }
 
 .nome-sistema {
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff, var(--saude-secondary-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .controles-topo {
@@ -79,29 +97,25 @@ body {
   outline: none;
 }
 
-.botao-imagem, .botao-imprimir {
-  height: 38px;
-  padding: 0 20px;
-  border-radius: 6px;
-  border: none;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
+.controles-topo select option {
+  background-color: var(--saude-primary);
   color: white;
 }
 
-.botao-imagem { background-color: var(--azul-claro); }
-.botao-imprimir { background-color: var(--verde-sucesso); }
-
-/* LAYOUT PRINCIPAL */
 .layout-principal {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 20px;
   padding: 30px 20px;
   flex: 1;
+  flex-wrap: wrap;
+}
+
+.area-impressao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .folha-a4 {
@@ -119,7 +133,52 @@ body {
   position: relative;
 }
 
-/* LOGOTIPO DA FOLHA */
+.botoes-exportacao {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  padding: 10px;
+}
+
+.botao-imagem, .botao-imprimir {
+  height: 45px;
+  padding: 0 30px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.botao-imagem { 
+  background: linear-gradient(135deg, var(--saude-primary-light), var(--saude-primary));
+  box-shadow: 0 2px 6px rgba(10, 92, 142, 0.3);
+}
+
+.botao-imagem:hover { 
+  background: linear-gradient(135deg, var(--saude-primary), var(--saude-primary-dark));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 92, 142, 0.4);
+}
+
+.botao-imprimir { 
+  background: linear-gradient(135deg, var(--saude-success), var(--saude-success-light));
+  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
+}
+
+.botao-imprimir:hover { 
+  background: linear-gradient(135deg, var(--saude-success-light), var(--saude-success));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
 .cabecalho-calendario {
   display: flex;
   justify-content: space-between;
@@ -161,7 +220,6 @@ body {
   font-family: "Chango", sans-serif;
 }
 
-/* GRADE DO CALENDÁRIO */
 .cabecalho-grade {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -169,6 +227,7 @@ body {
   color: var(--branco) !important;
   border: 1px solid var(--borda-calendario);
   -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .dia-semana {
@@ -177,6 +236,10 @@ body {
   font-weight: bold;
   font-size: 14px;
   border-right: 1px solid #444444;
+}
+
+.dia-semana:last-child {
+  border-right: none;
 }
 
 .corpo-grade {
@@ -198,6 +261,7 @@ body {
   box-sizing: border-box;
   background-color: var(--branco);
   -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .celula-dia:nth-child(7n+1) { margin-left: 0; }
@@ -205,15 +269,17 @@ body {
 .celula-dia.vazia-inicio { background-color: var(--cinza-claro) !important; }
 .celula-dia.vazia-final { border: none; background-color: transparent !important; }
 
-/* AJUSTE DO CABEÇALHO DO DIA (NÚMERO E CHECKBOX) */
 .cabecalho-dia {
   display: flex;
-  justify-content: space-between; /* Garante que um fique em cada ponta */
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 2px;
-  position: relative;
-  z-index: 5;
+  margin-bottom: 4px;
+}
+
+.info-data {
+  display: flex;
+  align-items: center;
 }
 
 .numero-dia { 
@@ -223,15 +289,16 @@ body {
 }
 
 .marcador-feriado {
-  width: 14px;
-  height: 14px;
-  cursor: pointer;
   margin: 0;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--saude-secondary);
 }
 
 .entrada-dia {
   width: 100%;
-  height: 100%;
+  flex: 1;
   border: none;
   background: transparent;
   text-align: center;
@@ -241,8 +308,31 @@ body {
   resize: none;
   outline: none;
   color: black;
-  position: relative;
-  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+
+.entrada-dia::placeholder {
+  color: #999;
+  font-weight: normal;
+  text-transform: none;
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.entrada-dia.feriado-ativo::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+}
+
+.entrada-dia:disabled {
+  color: transparent;
+  background-color: transparent;
 }
 
 .risco-diagonal {
@@ -253,7 +343,6 @@ body {
   pointer-events: none;
 }
 
-/* ÁREA DE AVISOS E BOTÕES DE EDIÇÃO */
 .rodape-calendario {
   margin-top: auto;
   padding-bottom: 5mm;
@@ -289,6 +378,12 @@ body {
   min-width: 35px;
 }
 
+.barra-ferramentas-aviso button:hover {
+  background: var(--cor-hover-lista);
+  color: var(--azul-marinho);
+  border-color: var(--azul-claro);
+}
+
 .area-avisos {
   border: 2px solid var(--azul-marinho);
   padding: 15px;
@@ -296,7 +391,18 @@ body {
   background-color: var(--branco);
   height: 30mm;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  cursor: text;
+  position: relative;
+}
+
+.editor-aviso:empty:before {
+  content: attr(data-placeholder);
+  color: #999;
+  font-weight: normal;
+  font-size: 16px;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .editor-aviso {
@@ -305,36 +411,148 @@ body {
   text-align: center;
   font-size: 20px;
   color: black;
+  line-height: normal;
+  min-height: 100%;
 }
 
-/* SELETOR LATERAL (UNIDADES) */
+.seletor-instrucoes {
+  width: 280px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+  border: 1px solid var(--saude-border);
+}
+
+.seletor-instrucoes h3 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--saude-primary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  border-bottom: 3px solid var(--saude-secondary);
+  padding-bottom: 12px;
+}
+
+.passo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.passo-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #e8e8e8;
+}
+
+.passo-card:hover {
+  transform: translateX(5px);
+  border-color: var(--saude-secondary);
+  box-shadow: 0 4px 12px rgba(0, 168, 168, 0.15);
+}
+
+.passo-numero {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--saude-primary), var(--saude-primary-dark));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.passo-conteudo {
+  flex: 1;
+}
+
+.passo-conteudo strong {
+  display: block;
+  font-size: 13px;
+  color: var(--saude-primary);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.passo-conteudo p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--saude-text);
+  line-height: 1.4;
+}
+
 .seletor-logotipos {
   width: 220px;
   background: white;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   height: fit-content;
   position: sticky;
   top: 20px;
+  border: 1px solid var(--saude-border);
+}
+
+.seletor-logotipos h3 {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  text-align: center;
+  color: var(--saude-primary);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.lista-logotipos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .item-logotipo {
   width: 100%;
   height: 80px;
   padding: 10px;
-  margin-bottom: 12px;
   background: #f8fafc;
   border: 2px solid #f1f5f9;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
-.item-logotipo.ativo { border-color: var(--azul-claro); background: white; }
+.item-logotipo:hover {
+  border-color: var(--saude-primary-light);
+  background: var(--saude-hover);
+  transform: translateY(-2px);
+}
+
+.item-logotipo.ativo { 
+  border-color: var(--saude-secondary); 
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,168,168,0.2);
+}
 
 .item-logotipo img {
   max-width: 100%;
@@ -342,19 +560,129 @@ body {
   object-fit: contain;
 }
 
+.botao-adicionar-logo {
+  width: 100%;
+  height: 50px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 22px;
+  color: #94a3b8;
+  margin-top: 8px;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.botao-adicionar-logo:hover {
+  border-color: var(--saude-secondary);
+  color: var(--saude-secondary);
+  background: var(--saude-hover);
+  transform: scale(1.02);
+}
+
+.botao-adicionar-logo input { display: none; }
+
 .footer-geral {
-  background-color: var(--azul-marinho);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 15px 0;
+  background: linear-gradient(135deg, var(--saude-primary) 0%, var(--saude-primary-dark) 100%);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 16px 0;
   text-align: center;
   margin-top: auto;
+  font-size: 13px;
+}
+
+.footer-conteudo {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+.divisor {
+  opacity: 0.5;
 }
 
 @media print {
-  .ocultar-na-impressao, .seletor-logotipos, .topo-site, .barra-ferramentas-aviso, .footer-geral { display: none !important; }
-  .folha-a4 { box-shadow: none; margin: 0; }
+  .ocultar-na-impressao, 
+  .seletor-instrucoes, 
+  .seletor-logotipos, 
+  .topo-site, 
+  .barra-ferramentas-aviso, 
+  .footer-geral,
+  .botoes-exportacao { 
+    display: none !important; 
+  }
+  
+  .folha-a4 { 
+    box-shadow: none; 
+    margin: 0; 
+    padding: 0;
+  }
+  
+  .area-avisos {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    height: auto !important;
+  }
+  
+  .editor-aviso {
+    font-size: 20px;
+    color: black;
+    text-align: center;
+  }
+  
+  .editor-aviso:empty:before {
+    content: none !important;
+  }
+  
+  .marcador-feriado {
+    display: none !important;
+  }
+  
+  .entrada-dia::placeholder {
+    color: transparent !important;
+  }
+  
+  .cabecalho-grade {
+    background: #222222 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }
 
 .modo-exportacao .ocultar-na-impressao, 
+.modo-exportacao .seletor-instrucoes,
 .modo-exportacao .seletor-logotipos,
-.modo-exportacao .footer-geral { display: none !important; }
+.modo-exportacao .footer-geral,
+.modo-exportacao .botoes-exportacao { 
+  display: none !important; 
+}
+
+.modo-exportacao .area-avisos {
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.modo-exportacao .editor-aviso {
+  font-size: 20px;
+  color: black;
+  text-align: center;
+}
+
+.modo-exportacao .editor-aviso:empty:before {
+  content: none !important;
+}
+
+.modo-exportacao .marcador-feriado {
+  display: none !important;
+}
+
+.modo-exportacao .entrada-dia::placeholder {
+  color: transparent !important;
+}
