@@ -504,11 +504,11 @@ function App() {
           
           <div className="botoes-exportacao ocultar-na-impressao">
             <button className="botao-imagem" onClick={exportarComoImagem}>
-              📸 EXPORTAR PNG
+              📸 EXPORTAR IMAGEM
             </button>
-            <button className="botao-imprimir" onClick={() => window.print()}>
+            {/* <button className="botao-imprimir" onClick={() => window.print()}>
               📄 GERAR PDF
-            </button>
+            </button> */}
           </div>
         </main>
 

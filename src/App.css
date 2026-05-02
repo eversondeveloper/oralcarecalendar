@@ -264,7 +264,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 31mm;
+  height: 32mm;
   box-sizing: border-box;
   background-color: var(--branco);
   -webkit-print-color-adjust: exact;
