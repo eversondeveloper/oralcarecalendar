@@ -5,6 +5,17 @@ import "./App.css";
 import unidade1 from "/unidade1.png";
 import unidade2 from "/unidade2.png";
 
+import back1 from "/back1.jpg";
+import backfolha2 from "/backfolha2.jpg";
+import backfolha3 from "/backfolha3.jpg";
+import backfolha4 from "/backfolha4.jpg";
+import backfolha5 from "/backfolha5.jpg";
+import backfolha6 from "/backfolha6.jpg";
+import backfolha7 from "/backfolha7.jpg";
+import backfolha8 from "/backfolha8.jpg";
+import backfolha9 from "/backfolha9.jpg";
+import backfolha10 from "/backfolha10.jpg";
+
 function App() {
   const [ano, definirAno] = useState(2026);
   const [mes, definirMes] = useState(4);
@@ -15,6 +26,21 @@ function App() {
     unidade1,
     unidade2,
   ]);
+
+  const [backgroundAtual, setBackgroundAtual] = useState(back1);
+
+  const backgroundsDisponiveis = [
+    { id: 1, nome: "Padrão", arquivo: back1, miniatura: back1 },
+    { id: 2, nome: "Background 2", arquivo: backfolha2, miniatura: backfolha2 },
+    { id: 3, nome: "Background 3", arquivo: backfolha3, miniatura: backfolha3 },
+    { id: 4, nome: "Background 4", arquivo: backfolha4, miniatura: backfolha4 },
+    { id: 5, nome: "Background 5", arquivo: backfolha5, miniatura: backfolha5 },
+    { id: 6, nome: "Background 6", arquivo: backfolha6, miniatura: backfolha6 },
+    { id: 7, nome: "Background 7", arquivo: backfolha7, miniatura: backfolha7 },
+    { id: 8, nome: "Background 8", arquivo: backfolha8, miniatura: backfolha8 },
+    { id: 9, nome: "Background 9", arquivo: backfolha9, miniatura: backfolha9 },
+    { id: 10, nome: "Background 10", arquivo: backfolha10, miniatura: backfolha10 },
+  ];
 
   const [notas, definirNotas] = useState({});
   const [feriados, definirFeriados] = useState({});
@@ -171,6 +197,10 @@ function App() {
     }
   };
 
+  const trocarBackground = (arquivo) => {
+    setBackgroundAtual(arquivo);
+  };
+
   const exportarComoImagem = async () => {
     if (referenciaFolha.current) {
       referenciaFolha.current.classList.add("modo-exportacao");
@@ -267,7 +297,15 @@ function App() {
         </aside>
 
         <main className="area-impressao">
-          <div className="folha-a4" ref={referenciaFolha}>
+          <div 
+            className="folha-a4" 
+            ref={referenciaFolha}
+            style={{
+              backgroundImage: `url('${backgroundAtual}')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
+          >
             <header className="cabecalho-calendario">
               <div className="area-logotipo-cliente">
                 <img src={logotipo} alt="Logo Cliente" />
@@ -418,6 +456,27 @@ function App() {
               <span>+</span>
               <input type="file" accept="image/*" onChange={adicionarNovoLogotipo} />
             </label>
+          </div>
+
+          <div className="seletor-background">
+            <h3>🎨 FUNDO DA FOLHA</h3>
+            <div className="lista-backgrounds">
+              {backgroundsDisponiveis.map((bg) => (
+                <button
+                  key={bg.id}
+                  className={`item-background ${backgroundAtual === bg.arquivo ? "ativo" : ""}`}
+                  onClick={() => trocarBackground(bg.arquivo)}
+                  title={bg.nome}
+                >
+                  <div className="miniatura-background">
+                    <img src={bg.miniatura} alt={bg.nome} />
+                    <div className="miniatura-overlay">
+                      <span>{bg.nome}</span>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         </aside>
       </div>

@@ -585,6 +585,90 @@ body {
 
 .botao-adicionar-logo input { display: none; }
 
+.seletor-background {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 2px solid var(--saude-border);
+}
+
+.seletor-background h3 {
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 12px;
+  text-align: center;
+  color: var(--saude-primary);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.lista-backgrounds {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.item-background {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.item-background:hover {
+  transform: translateY(-3px);
+}
+
+.item-background.ativo {
+  box-shadow: 0 0 0 3px var(--saude-secondary);
+  border-radius: 8px;
+}
+
+.miniatura-background {
+  position: relative;
+  width: 100%;
+  padding-bottom: 141.4%;
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--saude-border);
+}
+
+.miniatura-background img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.miniatura-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  padding: 8px 4px 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.item-background:hover .miniatura-overlay {
+  opacity: 1;
+}
+
+.miniatura-overlay span {
+  display: block;
+  color: white;
+  font-size: 9px;
+  text-align: center;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
 .footer-geral {
   background: linear-gradient(135deg, var(--saude-primary) 0%, var(--saude-primary-dark) 100%);
   color: rgba(255, 255, 255, 0.85);
