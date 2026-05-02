@@ -42,12 +42,14 @@ body {
 .topo-site {
   background: linear-gradient(135deg, var(--saude-primary) 0%, var(--saude-primary-dark) 100%);
   color: var(--branco);
-  padding: 15px 40px;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 10;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .marca-sistema {
@@ -83,6 +85,7 @@ body {
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .controles-topo select,
@@ -106,7 +109,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 20px;
-  padding: 30px 20px;
+  padding: 20px;
   flex: 1;
   flex-wrap: wrap;
 }
@@ -116,6 +119,9 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
 }
 
 .folha-a4 {
@@ -131,9 +137,7 @@ body {
   flex-direction: column;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   position: relative;
-  page-break-after: avoid;
-  page-break-inside: avoid;
-  break-inside: avoid;
+  transform-origin: top center;
 }
 
 .botoes-exportacao {
@@ -141,9 +145,10 @@ body {
   gap: 15px;
   justify-content: center;
   padding: 10px;
+  flex-wrap: wrap;
 }
 
-.botao-imagem, .botao-imprimir {
+.botao-imagem {
   height: 45px;
   padding: 0 30px;
   border-radius: 10px;
@@ -169,17 +174,6 @@ body {
   background: linear-gradient(135deg, var(--saude-primary), var(--saude-primary-dark));
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(10, 92, 142, 0.4);
-}
-
-.botao-imprimir { 
-  background: linear-gradient(135deg, var(--saude-success), var(--saude-success-light));
-  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
-}
-
-.botao-imprimir:hover { 
-  background: linear-gradient(135deg, var(--saude-success-light), var(--saude-success));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
 
 .cabecalho-calendario {
@@ -264,7 +258,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 32mm;
+  height: 31mm;
   box-sizing: border-box;
   background-color: var(--branco);
   -webkit-print-color-adjust: exact;
@@ -374,6 +368,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  flex-wrap: wrap;
 }
 
 .barra-ferramentas-aviso button {
@@ -699,6 +694,8 @@ body {
   justify-content: center;
   gap: 20px;
   align-items: center;
+  flex-wrap: wrap;
+  padding: 0 20px;
 }
 
 .divisor {
@@ -736,6 +733,171 @@ body {
   cursor: text !important;
 }
 
+/* RESPONSIVIDADE PARA CELULAR */
+@media screen and (max-width: 768px) {
+  .topo-site {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .controles-topo {
+    justify-content: center;
+  }
+  
+  .layout-principal {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+  }
+  
+  .seletor-instrucoes,
+  .seletor-logotipos {
+    width: 100%;
+    max-width: 400px;
+    position: static;
+    order: 2;
+  }
+  
+  .seletor-instrucoes {
+    order: 1;
+  }
+  
+  .seletor-logotipos {
+    order: 3;
+  }
+  
+  .area-impressao {
+    order: 2;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .folha-a4 {
+    transform: scale(0.95);
+    transform-origin: top center;
+    margin: 0 auto;
+  }
+  
+  .botoes-exportacao {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .botao-imagem {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  .barra-ferramentas-aviso {
+    gap: 2px;
+  }
+  
+  .barra-ferramentas-aviso button {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-width: 30px;
+  }
+  
+  .editor-aviso {
+    font-size: 14px;
+  }
+  
+  .editor-aviso:empty:before {
+    font-size: 12px;
+  }
+  
+  .passo-card {
+    padding: 8px;
+  }
+  
+  .passo-numero {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  
+  .passo-conteudo strong {
+    font-size: 12px;
+  }
+  
+  .passo-conteudo p {
+    font-size: 11px;
+  }
+  
+  .lista-backgrounds {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  
+  .miniatura-overlay span {
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .topo-site {
+    padding: 12px;
+  }
+  
+  .nome-sistema {
+    font-size: 18px;
+  }
+  
+  .icone-sistema {
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .controles-topo select,
+  .controles-topo input[type="number"] {
+    height: 34px;
+    font-size: 12px;
+    padding: 0 8px;
+  }
+  
+  .folha-a4 {
+    transform: scale(0.85);
+  }
+  
+  .botao-imagem {
+    height: 40px;
+    font-size: 11px;
+    padding: 0 20px;
+  }
+  
+  .barra-ferramentas-aviso button {
+    padding: 3px 6px;
+    font-size: 10px;
+    min-width: 25px;
+  }
+  
+  .seletor-instrucoes h3,
+  .seletor-logotipos h3 {
+    font-size: 14px;
+  }
+  
+  .passo-card {
+    gap: 8px;
+  }
+  
+  .lista-backgrounds {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .footer-conteudo {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .divisor {
+    display: none;
+  }
+}
+
 @media print {
   @page {
     size: A4;
@@ -771,6 +933,7 @@ body {
     break-after: avoid;
     position: relative;
     overflow: hidden;
+    transform: none;
   }
   
   .grade-calendario {
